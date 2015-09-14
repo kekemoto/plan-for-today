@@ -74,12 +74,11 @@
 			function check(e){
 				if("rgb(255, 255, 255)" == document.defaultView.getComputedStyle(e.target, "").getPropertyValue("background-color")){
 					e.target.style.backgroundColor = "black";
-					document.cookie = e.target.id + "=black";
 				}
 				else{
 					e.target.style.backgroundColor = "white";
-					document.cookie = e.target.id + "=white";
 				}
+				cookieWrite();
 			}
 
 			function generation(value,color){
@@ -145,19 +144,18 @@
 					spanList.push(span[i].innerHTML);
 				}
 
+				//make expires
+				var time = 2*24*60*60*1000;	//“ñ“úŠÔ‚Ì—LŒøŠúŒÀ
+				var date = new Date();
+				date.setTime(date.getTime() + time);
+				date = date.toGMTString();
+				var expires = ';expires=' + date + ';max-age=' + time;
+
 				//write cookie
 				for(var i=0; i<span.length; i++){
-					document.cookie = 'check' + i + '=' + escape(checkList[i]);
-					document.cookie = 'value' + i + '=' + escape(spanList[i]);
+					document.cookie = 'check' + i + '=' + escape(checkList[i]) + expires;
+					document.cookie = 'value' + i + '=' + escape(spanList[i]) + expires;
 				}
-
-				//expires
-				var time = new Date();
-				time.setTime(time.getTime() + 2*24*60*60*1000);	//“ñ“úŠÔ‚Ì—LŒøŠúŒÀ
-				time = time.toGMTString();
-
-				document.cookie = 'expires=' + time;
-				document.cookie = 'max-age=' + 2*24*60*60*1000;	//“ñ“úŠÔ‚Ì—LŒøŠúŒÀ
 			}
 
 			function cookieLoad(){
