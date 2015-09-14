@@ -58,10 +58,10 @@
 				for(var key in cookies){
 					if(cookies[key] != ""){
 						if(-1 != key.indexOf("check")){
-							checkList[key.charAt(5)] = cookies[key];
+							checkList[key.substr(5)] = cookies[key];
 						}
 						else if(-1 != key.indexOf("value")){
-							valueList[key.charAt(5)] = unescape(cookies[key]);
+							valueList[key.substr(5)] = unescape(cookies[key]);
 						}
 					}
 				}
@@ -90,15 +90,20 @@
 					list.addEventListener("dragstart", dragstart, false);
 					board.appendChild(list);
 					
+					//for sort
+					function com(a, b) {  return b - a; }
+
 					var element = document.getElementsByClassName("list");
 					var ids = [];
-					if(element.lenght != 0){
-						for (var i=0; i<element.lenght; i++){
-							ids.push(element[i].id.charAt(5));
+					if(1 < element.length){
+						for (var i=0; i<element.length-1; i++){
+							console.dir(element[i].firstChild);
+							ids.push(element[i].firstChild.id.substr(5));
 						}
-						ids.sort();
-					}else ids.push(0);
-					console.dir(ids);
+						console.dir(ids);
+						ids.sort(com);
+						ids[0]++;
+					}else ids.push("0");
 					var checkBox = document.createElement("div");
 					checkBox.className = "check";
 					checkBox.id = "check" + ids[0];
@@ -145,7 +150,7 @@
 				}
 
 				//make expires
-				var time = 2*24*60*60*1000;	//ìÒì˙ä‘ÇÃóLå¯ä˙å¿
+				var time = 2*24*60*60*1000;	//‰∫åÊó•Èñì„ÅÆÊúâÂäπÊúüÈôê
 				var date = new Date();
 				date.setTime(date.getTime() + time);
 				date = date.toGMTString();
@@ -179,7 +184,6 @@
 			}
 
 			function dragstart(e){
-				console.dir(e.toElement);
 				var data = e.dataTransfer;
 				data.setData("text", e.toElement.children[0].id);
 			}
@@ -196,7 +200,7 @@
 		<h1>Plan for Today</h1>
 		<section>
 			<div id="board">
-				<!--<div class="list"><div class="check"></div><span>Plan for TodayÇçÏÇÈ</span></div>-->
+				<!--<div class="list"><div class="check"></div><span>Plan for Today„Çí‰Ωú„Çã</span></div>-->
 			</div>
 			<input type="text" placeholder="writing a plan" id="input"><br>
 			<img src="trash.png" height="40px" id="trash"><br>
