@@ -41,6 +41,8 @@
 		</style>
 
 		<script type="text/javascript">
+			var annotation = false;
+			
 			window.onload = function(){
 				loadList();
 
@@ -178,9 +180,16 @@
 			}
 
 			function advice(e){
-				var text = document.createElement("div");
-				text.innerHTML = "Drag to me";
-				e.target.parentNode.insertBefore(text, document.getElementById("trash"));
+				if(annotation == false){
+					annotation = true;
+					var text = document.createElement("div");
+					text.innerHTML = "Drag to me";
+					e.target.parentNode.insertBefore(text, document.getElementById("trash"));
+					setTimeout(function(){
+						annotation=false;
+						text.parentNode.removeChild(text);
+					}, 2500);
+				}
 			}
 
 			function dragstart(e){
